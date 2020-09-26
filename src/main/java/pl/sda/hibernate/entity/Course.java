@@ -1,11 +1,7 @@
 package pl.sda.hibernate.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,33 +11,15 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "TestCourse")
-public class Course extends BaseEntity {
+@Table(name = "course")
+public class Course extends NamedEntity {
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String name;
-    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
+
     @OneToMany(mappedBy = "course")
     private Set<Student> students = new HashSet<>();
     @ManyToMany(mappedBy = "courses")
     private Set<Teacher> teachers = new HashSet<>();
-
-    public Set<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -51,25 +29,33 @@ public class Course extends BaseEntity {
         this.startDate = startDate;
     }
 
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Course course = (Course) o;
-        return Objects.equals(name, course.name) &&
-                Objects.equals(startDate, course.startDate);
+        return Objects.equals(startDate, course.startDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, startDate);
+        return Objects.hash(super.hashCode(), startDate);
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", startDate=" + startDate +
                 '}';
     }
